@@ -13,9 +13,9 @@ class AuthController extends Controller
     {
         $username = $request->input('username');
         $password = $request->input('password');
-        
+
         // กำหนด Role ที่อนุญาต
-        $allowedRoles = ['admin', 'sale','account','approver'];
+        $allowedRoles = ['admin', 'sale', 'account', 'approver', 'student'];
 
         $user = User::where('username', $username)->first();
 
@@ -35,9 +35,15 @@ class AuthController extends Controller
 
         return response()->json([
             'status' => '200',
-            'message' => 'You token CreateComplete',
-            'role' => $user->role,
-            'token' => $user->createToken(Str::random(16))->plainTextToken
+            'message' => 'Login successful',
+            'token' => $user->createToken(Str::random(16))->plainTextToken,
+            'user' => [
+                'id' => $user->id,
+                'name' => $user->name,
+                'username' => $user->username,
+                'email' => $user->email,
+                'role' => $user->role,
+            ]
         ]);
     }
 
